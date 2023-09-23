@@ -1,3 +1,9 @@
+# use non-interactive backend to avoid
+# RuntimeError: main thread is not in main loop
+# with tkinter
+import matplotlib
+matplotlib.use('agg') # raster graphics, png
+
 # neural network
 import torch
 from UNet import UNet
