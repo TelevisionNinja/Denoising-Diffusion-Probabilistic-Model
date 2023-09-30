@@ -164,7 +164,7 @@ class GaussianDiffusion(torch.nn.Module):
 
         loss = self.loss_function(input=noise_prediction,
                                   target=target)
-        loss = einops.reduce(loss, 'b ... -> b (...)', 'mean')
+        loss = einops.reduce(loss, 'b ... -> b', 'mean')
         loss = loss * self.get_index_from_list(self.loss_weight, timestep, loss.shape)
         return loss.mean()
 
