@@ -285,8 +285,7 @@ def main():
     training_set_transformed_no_resize = ImageDataset(directory=image_dataset_directory,
                                                     transform=image_transform_no_resize)
 
-    training_set_transformed = ImageDataset(directory=image_dataset_directory,
-                                            recursive=False)
+    training_set_transformed = ImageDataset(directory=image_dataset_directory)
 
     # filter out images if they have tags in their file names
     remove_list = [
@@ -315,7 +314,7 @@ def main():
 
     # make data loader
 
-    batch_size = 2**3
+    batch_size = 2**4
 
     training_dataloader = DataLoader(dataset=training_set_transformed,
                                                 batch_size=batch_size,
