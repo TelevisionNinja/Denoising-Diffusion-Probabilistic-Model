@@ -234,9 +234,9 @@ class GaussianDiffusion(torch.nn.Module):
 
             for index in tqdm(reversed(range(0, self.total_timesteps)), total=self.total_timesteps):
                 timestep_batch = torch.full(size=tuple([batch_size]),
-                                        fill_value=index,
-                                        device=self.device,
-                                        dtype=torch.long)
+                                            fill_value=index,
+                                            device=self.device,
+                                            dtype=torch.long)
 
                 image_batch = self.p_sample(image_batch, timestep_batch, index)
 
@@ -260,28 +260,28 @@ class GaussianDiffusion(torch.nn.Module):
 
         with torch.inference_mode():
             times = torch.linspace(start=-1,
-                                end=self.total_timesteps - 1,
-                                steps=sampling_timesteps + 1,
-                                device=self.device) # [-1, 0, 1, 2, ..., T-1] when sampling_timesteps == total_timesteps
+                                   end=self.total_timesteps - 1,
+                                   steps=sampling_timesteps + 1,
+                                   device=self.device) # [-1, 0, 1, 2, ..., T-1] when sampling_timesteps == total_timesteps
             times = list(reversed(times.int().tolist()))
             time_pairs = list(zip(times[:-1], times[1:])) # [(T-1, T-2), (T-2, T-3), ..., (1, 0), (0, -1)]
 
             tensor_shape = (batch_size, self.model.image_channels, image_size[0], image_size[1]) # batch size, color channels, height, width
             image_batch = torch.randn(size=tensor_shape,
-                                    device=self.device)
+                                      device=self.device)
             images = [image_batch]
 
             for time, next_time in tqdm(time_pairs):
                 timestep_batch = torch.full(size=tuple([batch_size]),
-                                    fill_value=time,
-                                    device=self.device,
-                                    dtype=torch.long)
+                                            fill_value=time,
+                                            device=self.device,
+                                            dtype=torch.long)
 
                 x_initial = self.get_model_prediction(image_batch=image_batch,
                                                       timestep_batch=timestep_batch)
                 predicted_noise = self.predict_noise_from_start(x_t=image_batch,
-                                                        t=timestep_batch,
-                                                        x_initial=x_initial)
+                                                                t=timestep_batch,
+                                                                x_initial=x_initial)
 
                 if next_time < 0:
                     image_batch = x_initial
@@ -293,7 +293,7 @@ class GaussianDiffusion(torch.nn.Module):
                     c = (1 - alpha_next - sigma ** 2).sqrt()
 
                     noise = torch.randn_like(input=image_batch,
-                                            device=self.device)
+                                             device=self.device)
 
                     image_batch = x_initial * alpha_next.sqrt() + c * predicted_noise + sigma * noise
 

@@ -26,7 +26,7 @@ class Attention(torch.nn.Module):
         self.heads = heads
         hidden_dim = dim_head * self.heads
         self.memory_key_values = torch.nn.Parameter(torch.randn(size=(2, heads, number_memory_key_values, dim_head),
-                                                     device=self.device))
+                                                                device=self.device))
         self.to_qkv = torch.nn.Conv2d(in_channels=dim,
                                       out_channels=hidden_dim * 3,
                                       kernel_size=(1, 1),
