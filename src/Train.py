@@ -16,28 +16,28 @@ import matplotlib.pyplot
 
 class Train():
     def __init__(
-        self,
-        diffusion_model,
-        data_loader,
-        gradient_accumulate_every=1,
-        learning_rate=0.001,
-        training_epochs=100000,
-        adam_betas=(0.9, 0.99),
-        sample_every=10000,
-        save_every=10,
-        sample_batch_size=4,
-        sample_batch_image_size=(64, 64),
-        results_directory='./results',
-        amp=False, # enable mixed precision
-        mixed_precision_type='fp16',
-        split_batches=True,
-        max_grad_norm=1,
-        save_latest_only=False,
-        minimum_dataset_size=100,
-        effective_batch_size=16,
-        use_ddim_sampling=True,
-        sampling_timesteps=2**8
-    ):
+            self,
+            diffusion_model,
+            data_loader,
+            gradient_accumulate_every=1,
+            learning_rate=0.001,
+            training_epochs=100000,
+            adam_betas=(0.9, 0.99),
+            sample_every=10000,
+            save_every=10,
+            sample_batch_size=4,
+            sample_batch_image_size=(64, 64),
+            results_directory='./results',
+            amp=False, # enable mixed precision
+            mixed_precision_type='fp16',
+            split_batches=True,
+            max_grad_norm=1,
+            save_latest_only=False,
+            minimum_dataset_size=100,
+            effective_batch_size=16,
+            use_ddim_sampling=True,
+            sampling_timesteps=2**8
+        ):
         super().__init__()
 
         self.device = 'cpu'

@@ -2,7 +2,12 @@ import torch
 
 
 class Block(torch.nn.Module):
-    def __init__(self, dim, dim_out, groups=8):
+    def __init__(
+            self,
+            dim,
+            dim_out,
+            groups=8
+        ):
         super().__init__()
 
         self.device = 'cpu'
@@ -40,7 +45,13 @@ class ResNetBlock(torch.nn.Module):
     https://arxiv.org/abs/1512.03385
     """
 
-    def __init__(self, dim, dim_out, time_embedding_dimension, groups=8):
+    def __init__(
+            self,
+            dim,
+            dim_out,
+            time_embedding_dimension,
+            groups=8
+        ):
         super().__init__()
 
         self.device = 'cpu'

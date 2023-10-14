@@ -9,7 +9,16 @@ Image.MAX_IMAGE_PIXELS = None
 
 
 class ImageDataset(Dataset):
-    def __init__(self, directory='', training_image_size=(128, 128), split=None, transform=None, data_split_percent=0.8, colors='RGB', recursive=True):
+    def __init__(
+            self,
+            directory='',
+            training_image_size=(128, 128),
+            split=None,
+            transform=None,
+            data_split_percent=0.8,
+            colors='RGB',
+            recursive=True
+        ):
         super().__init__()
 
         file_extensions = ('jpg', 'jpeg', 'png', 'webp')

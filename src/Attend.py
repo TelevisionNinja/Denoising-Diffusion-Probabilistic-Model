@@ -5,10 +5,10 @@ import math
 
 class Attend(torch.nn.Module):
     def __init__(
-        self,
-        dropout=0,
-        flash=True
-    ):
+            self,
+            dropout=0,
+            flash=True
+        ):
         super().__init__()
 
         cuda_available = torch.cuda.is_available()

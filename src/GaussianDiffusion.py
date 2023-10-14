@@ -6,10 +6,12 @@ from tqdm.auto import tqdm
 
 
 class GaussianDiffusion(torch.nn.Module):
-    def __init__(self,
-                 model,
-                 timesteps=2**10,
-                 ddim_sampling_eta=0):
+    def __init__(
+            self,
+            model,
+            timesteps=2**10,
+            ddim_sampling_eta=0
+        ):
         super().__init__()
 
         self.device = 'cpu'

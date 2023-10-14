@@ -7,11 +7,13 @@ import einops.layers.torch
 
 
 class UNet(torch.nn.Module):
-    def __init__(self,
-                 image_channels=3,
-                 dimensions=[2**6, 2**7, 2**8, 2**9],
-                 flash_attention=True,
-                 attention_scheme = (False, False, False, True)):
+    def __init__(
+            self,
+            image_channels=3,
+            dimensions=[2**6, 2**7, 2**8, 2**9],
+            flash_attention=True,
+            attention_scheme = (False, False, False, True)
+        ):
         super().__init__()
 
         self.device = 'cpu'

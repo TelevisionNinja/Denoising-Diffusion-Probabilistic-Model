@@ -6,7 +6,14 @@ class ConvNeXtBlock1(torch.nn.Module):
     https://arxiv.org/abs/2201.03545
     """
 
-    def __init__(self, dim, dim_out, time_embedding_dimension, mult=2, norm=True):
+    def __init__(
+            self,
+            dim,
+            dim_out,
+            time_embedding_dimension,
+            mult=2,
+            norm=True
+        ):
         super().__init__()
 
         self.device = 'cpu'
@@ -76,7 +83,14 @@ class ConvNeXtBlock2(torch.nn.Module):
     https://arxiv.org/abs/2201.03545
     """
 
-    def __init__(self, dim, dim_out, time_embedding_dimension, mult=2, norm=True):
+    def __init__(
+            self,
+            dim,
+            dim_out,
+            time_embedding_dimension,
+            mult=2,
+            norm=True
+        ):
         super().__init__()
 
         self.device = 'cpu'
