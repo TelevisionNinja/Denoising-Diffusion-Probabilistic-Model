@@ -5,12 +5,17 @@ from RMSNormalization import RMSNormalization
 
 
 class LinearAttention(torch.nn.Module):
+    """
+    https://arxiv.org/abs/2306.12929
+    """
+
     def __init__(
-        self,
-        dim,
-        heads = 4,
-        dim_head = 32
-    ):
+            self,
+            dim,
+            heads = 4,
+            dim_head = 32,
+            number_memory_key_values = 4
+        ):
         super().__init__()
 
         self.device = 'cpu'
@@ -22,6 +27,8 @@ class LinearAttention(torch.nn.Module):
         hidden_dim = dim_head * heads
 
         self.normalize = RMSNormalization(dim)
+        self.memory_key_values = torch.nn.Parameter(torch.randn(size=(2, heads, dim_head, number_memory_key_values),
+                                                                device=self.device))
         self.to_qkv = torch.nn.Conv2d(in_channels=dim,
                                       out_channels=hidden_dim * 3,
                                       kernel_size=(1, 1),
@@ -29,9 +36,9 @@ class LinearAttention(torch.nn.Module):
                                       device=self.device)
         self.to_out = torch.nn.Sequential(
             torch.nn.Conv2d(in_channels=hidden_dim,
-                                      out_channels=dim,
-                                      kernel_size=(1, 1),
-                                      device=self.device),
+                            out_channels=dim,
+                            kernel_size=(1, 1),
+                            device=self.device),
             RMSNormalization(dim)
         )
 
@@ -49,6 +56,13 @@ class LinearAttention(torch.nn.Module):
             lambda t: einops.rearrange(t, 'b (h c) x y -> b h c (x y)', h=self.heads),
             qkv
         )
+
+        mk, mv = map(
+            lambda t: einops.repeat(t, 'h c n -> b h c n', b=batch),
+            self.memory_key_values
+        )
+        k = torch.cat(tensors=(mk, k), dim=-1)
+        v = torch.cat(tensors=(mv, v), dim=-1)
 
         q = q.softmax(dim = -2)
         k = k.softmax(dim = -1)
