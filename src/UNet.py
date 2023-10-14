@@ -12,7 +12,7 @@ class UNet(torch.nn.Module):
             image_channels=3,
             dimensions=[2**6, 2**7, 2**8, 2**9],
             flash_attention=True,
-            attention_scheme = (False, False, False, True)
+            attention_scheme=(False, False, False, True)
         ):
         super().__init__()
 
@@ -46,56 +46,56 @@ class UNet(torch.nn.Module):
 
             self.down.append(torch.nn.ModuleList([
                 ResNetBlock(dim=dim_in,
-                              dim_out=dim_in,
-                              time_embedding_dimension=self.time_embedding_dimension),
+                            dim_out=dim_in,
+                            time_embedding_dimension=self.time_embedding_dimension),
                 ResNetBlock(dim=dim_in,
-                              dim_out=dim_in,
-                              time_embedding_dimension=self.time_embedding_dimension),
+                            dim_out=dim_in,
+                            time_embedding_dimension=self.time_embedding_dimension),
                 Attention(dim=dim_in,
                           flash=flash_attention) if is_full_attention else LinearAttention(dim=dim_in),
                 self.downsample(dim=dim_in,
                                 dim_out=dim_out) if not is_last else torch.nn.Conv2d(in_channels=dim_in,
-                                                                                out_channels=dim_out,
-                                                                                kernel_size=(3, 3),
-                                                                                stride=(1, 1),
-                                                                                padding=(1, 1),
-                                                                                device=self.device)
+                                                                                     out_channels=dim_out,
+                                                                                     kernel_size=(3, 3),
+                                                                                     stride=(1, 1),
+                                                                                     padding=(1, 1),
+                                                                                     device=self.device)
             ]))
 
         bottleneck_dimension = self.dimensions[-1]
         self.bottleneck_block1 = ResNetBlock(dim=bottleneck_dimension,
-                                               dim_out=bottleneck_dimension,
-                                               time_embedding_dimension=self.time_embedding_dimension)
+                                             dim_out=bottleneck_dimension,
+                                             time_embedding_dimension=self.time_embedding_dimension)
         self.bottleneck_attention = Attention(dim=bottleneck_dimension,
                                               flash=flash_attention)
         self.bottleneck_block2 = ResNetBlock(dim=bottleneck_dimension,
-                                               dim_out=bottleneck_dimension,
-                                               time_embedding_dimension=self.time_embedding_dimension)
+                                             dim_out=bottleneck_dimension,
+                                             time_embedding_dimension=self.time_embedding_dimension)
 
         for index, ((dim_in, dim_out), is_full_attention) in enumerate(reversed(list(zip(in_out_dimensions, attention_scheme)))):
             is_last = index >= num_of_iterations - 1
 
             self.up.append(torch.nn.ModuleList([
                 ResNetBlock(dim=dim_out + dim_in,
-                              dim_out=dim_out,
-                              time_embedding_dimension=self.time_embedding_dimension),
+                            dim_out=dim_out,
+                            time_embedding_dimension=self.time_embedding_dimension),
                 ResNetBlock(dim=dim_out + dim_in,
-                              dim_out=dim_out,
-                              time_embedding_dimension=self.time_embedding_dimension),
+                            dim_out=dim_out,
+                            time_embedding_dimension=self.time_embedding_dimension),
                 Attention(dim=dim_out,
                           flash=flash_attention) if is_full_attention else LinearAttention(dim=dim_out),
                 self.upsample(dim=dim_out,
                               dim_out=dim_in) if not is_last else torch.nn.Conv2d(in_channels=dim_out,
-                                                                              out_channels=dim_in,
-                                                                              kernel_size=(3, 3),
-                                                                              stride=(1, 1),
-                                                                              padding=(1, 1),
-                                                                              device=self.device)
+                                                                                  out_channels=dim_in,
+                                                                                  kernel_size=(3, 3),
+                                                                                  stride=(1, 1),
+                                                                                  padding=(1, 1),
+                                                                                  device=self.device)
             ]))
 
         self.final_block = ResNetBlock(dim=self.dimensions[1],
-                                             dim_out=self.dimensions[0],
-                                             time_embedding_dimension=self.time_embedding_dimension)
+                                       dim_out=self.dimensions[0],
+                                       time_embedding_dimension=self.time_embedding_dimension)
         self.final_convolution = torch.nn.Conv2d(in_channels=self.dimensions[0],
                                                  out_channels=self.image_channels,
                                                  kernel_size=(1, 1),

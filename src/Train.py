@@ -49,8 +49,7 @@ class Train():
             mixed_precision_type = 'no'
 
         self.accelerator = Accelerator(split_batches=split_batches,
-                                       mixed_precision=mixed_precision_type
-        )
+                                       mixed_precision=mixed_precision_type)
 
         self.sample_batch_size = sample_batch_size
         self.sample_batch_image_size = sample_batch_image_size
@@ -139,7 +138,7 @@ class Train():
         model.eval()
 
         model.to(device=self.device,
-                non_blocking=True)
+                 non_blocking=True)
 
 
     def train(self):
