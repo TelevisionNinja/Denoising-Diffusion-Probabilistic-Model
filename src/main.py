@@ -3,6 +3,8 @@
 # with tkinter
 import matplotlib
 matplotlib.use('agg') # raster graphics, png
+# matplotlib.use('pdf') # vector graphics, pdf
+# matplotlib.use('svg') # vector graphics, svg
 
 # neural network
 import torch

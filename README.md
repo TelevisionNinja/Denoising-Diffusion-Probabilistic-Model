@@ -7,6 +7,7 @@ An implementation of denoising diffusion probabilistic models using PyTorch
 - matplotlib
 - einops
 - accelerate
+- tensorboard
 
 # Command to run the model
 ```bash
