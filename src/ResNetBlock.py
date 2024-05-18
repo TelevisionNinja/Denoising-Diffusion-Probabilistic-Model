@@ -1,12 +1,15 @@
 import torch
+from RMSNormalization import RMSNormalization
 
 
 class Block(torch.nn.Module):
+    """
+    https://arxiv.org/abs/2312.02696
+    """
     def __init__(
             self,
             dim,
-            dim_out,
-            groups=8
+            dim_out
         ):
         super().__init__()
 
@@ -19,9 +22,7 @@ class Block(torch.nn.Module):
                                     kernel_size=(3, 3),
                                     padding=(1, 1),
                                     device=self.device)
-        self.normalize = torch.nn.GroupNorm(num_groups=groups,
-                                       num_channels=dim_out,
-                                       device=self.device)
+        self.normalize = RMSNormalization(dim=dim_out)
         self.activation_function = torch.nn.SiLU() # inplace=True
 
         self.to(device=self.device,
@@ -43,14 +44,14 @@ class Block(torch.nn.Module):
 class ResNetBlock(torch.nn.Module):
     """
     https://arxiv.org/abs/1512.03385
+    https://arxiv.org/abs/2312.02696
     """
 
     def __init__(
             self,
             dim,
             dim_out,
-            time_embedding_dimension,
-            groups=8
+            time_embedding_dimension
         ):
         super().__init__()
 
@@ -66,11 +67,9 @@ class ResNetBlock(torch.nn.Module):
         )
 
         self.block1 = Block(dim=dim,
-                            dim_out=dim_out,
-                            groups=groups)
+                            dim_out=dim_out)
         self.block2 = Block(dim=dim_out,
-                            dim_out=dim_out,
-                            groups=groups)
+                            dim_out=dim_out)
         self.res_convolution = torch.nn.Conv2d(in_channels=dim,
                                         out_channels=dim_out,
                                         kernel_size=(1, 1),
