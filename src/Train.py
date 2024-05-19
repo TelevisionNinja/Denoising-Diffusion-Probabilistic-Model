@@ -1,5 +1,5 @@
 # training
-from accelerate import Accelerator
+from accelerate import Accelerator, DataLoaderConfiguration
 from pathlib import Path
 import itertools
 import torch
@@ -48,7 +48,9 @@ class Train():
         if not amp:
             mixed_precision_type = 'no'
 
-        self.accelerator = Accelerator(split_batches=split_batches,
+        dataloader_config = DataLoaderConfiguration(split_batches=split_batches,
+                                                    non_blocking=True)
+        self.accelerator = Accelerator(dataloader_config=dataloader_config,
                                        mixed_precision=mixed_precision_type)
 
         self.sample_batch_size = sample_batch_size
